@@ -15,7 +15,7 @@ export interface UrlStats{
 }
 
 
-export class Url_Repository{
+export class UrlRepository{
 
     async create(data: CreateUrl):Promise<IUrl> {
         const url = new Url(data)
