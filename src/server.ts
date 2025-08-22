@@ -7,6 +7,9 @@ import logger from './config/logger.config';
 import { attachCorrelationIdMiddleware } from './middlewares/correlation.middleware';
 import { initRedis } from './config/redis';
 import { connectDB } from './config/db';
+import { createExpressMiddleware} from "@trpc/server/adapters/express"
+import { trpcRouter } from './routers/trpc';
+import { redirectUrl } from './controllers/url.controller';
 const app = express();
 
 app.use(express.json());
@@ -26,6 +29,12 @@ app.use('/api/v2', v2Router);
 
 app.use(appErrorHandler);
 app.use(genericErrorHandler);
+
+app.use('/trpc', createExpressMiddleware({
+    router: trpcRouter
+}))
+
+app.get('/:shortUrl', redirectUrl)
 
 
 app.listen(serverConfig.PORT, async() => {
